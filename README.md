@@ -1,6 +1,6 @@
 # ci-shared
 
-Shared CI mechanisms for Software Clever sibling repos, maintained once and
+Shared CI mechanisms for sibling repos, maintained once and
 inherited rather than re-implemented per repo.
 
 ## docs-freshness
