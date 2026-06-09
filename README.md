@@ -1,9 +1,7 @@
 # ci-shared
 
 Shared CI mechanisms for Software Clever sibling repos, maintained once and
-inherited rather than re-implemented per repo. This is the home named in the
-umbrella [`AI_OPERATING_MODEL.md`](../../AI_OPERATING_MODEL.md) Phase 3 (shared
-umbrella ruleset).
+inherited rather than re-implemented per repo.
 
 ## docs-freshness
 
