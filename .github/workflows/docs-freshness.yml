@@ -1,0 +1,48 @@
+# Reusable docs-freshness gate. Sibling repos call this from their own CI:
+#
+#   jobs:
+#     docs-freshness:
+#       uses: software-clever/ci-shared/.github/workflows/docs-freshness.yml@main
+#
+# It checks out the CALLING repo, fetches the script from ci-shared, and runs the
+# doc-coupling gate (Check A) + referential-integrity check (Check B) against the
+# caller's ./docs-freshness.json. Requires the caller to define that config file.
+name: docs-freshness
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: ci-shared ref to pull the script from
+        required: false
+        type: string
+        default: main
+
+jobs:
+  docs-freshness:
+    name: Docs freshness
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth: 0 so the gate can compute a real merge-base against the PR
+      # base branch and resolve cited commit SHAs.
+      - name: Check out calling repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ci-shared is a public org repo, so the default token reads it fine and no
+      # caller needs a PAT. If it is ever made private, add a CI_SHARED_TOKEN PAT
+      # here with read access to ci-shared.
+      - name: Fetch the docs-freshness script
+        uses: actions/checkout@v4
+        with:
+          repository: software-clever/ci-shared
+          ref: ${{ inputs.ref }}
+          path: .ci-shared
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run docs-freshness gate
+        run: node .ci-shared/scripts/docs-freshness/index.mjs
