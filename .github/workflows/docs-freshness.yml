@@ -26,7 +26,7 @@ jobs:
       # fetch-depth: 0 so the gate can compute a real merge-base against the PR
       # base branch and resolve cited commit SHAs.
       - name: Check out calling repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -34,15 +34,15 @@ jobs:
       # caller needs a PAT. If it is ever made private, add a CI_SHARED_TOKEN PAT
       # here with read access to ci-shared.
       - name: Fetch the docs-freshness script
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: software-clever/ci-shared
           ref: ${{ inputs.ref }}
           path: .ci-shared
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Run docs-freshness gate
         run: node .ci-shared/scripts/docs-freshness/index.mjs
